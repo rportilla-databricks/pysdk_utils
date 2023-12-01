@@ -4,23 +4,10 @@ import platform
 import re
 
 class DIPConnect:
-    def __init__(self, workspace_url, setup_fl = False, profile : str = ""):
+    def __init__(self, workspace_url, profile : str = ""):
         # Initialize any required variables
         self.workspace_url = workspace_url
-        self.setup_fl = setup_fl
         self.profile = profile
-
-    def setup_environment(self):
-        # Shell command for Databricks authentication
-        cli_command = "databricks configure {}".format(self.workspace_url)
-
-        try:
-            # Run the shell command
-            subprocess.run(cli_command, shell=True, check=True)
-            print("Authentication successful.")
-        except subprocess.CalledProcessError as e:
-            # Handle errors in the authentication process
-            print(f"An error occurred during authentication: {e}")
 
     def __get_prefix(self):
 
@@ -55,13 +42,15 @@ class DIPConnect:
             # Note: Replace 'Prompt text' with the actual text that the command
             # prompts you with before you need to enter the profile name
             # Send the profile name
+            prefix = self.__get_prefix()
             if len(self.profile) > 0:
-                prefix = self.__get_prefix()
                 for l in prefix:
                     child.send('\b')
                 child.sendline(self.profile)
 
             else:
+                self.profile = prefix
+                print(f"Profile set in authenticate: {self.profile}")  # Debug print
                 child.sendline('\n')
 
             # Optional: Wait for any follow-up prompts and send responses in a similar way
@@ -75,7 +64,7 @@ class DIPConnect:
             stdout = child.before.decode()
 
             if stdout:
-                print("Authentication successful. Output:", stdout)
+                print("Authentication successful.")
             else:
                 print("Authentication unsuccessful or no output.")
 
@@ -86,9 +75,9 @@ class DIPConnect:
     def setup_profile(self):
         import os
         os.environ['DATABRICKS_CONFIG_PROFILE'] = self.profile
+        print("Set up profile with name " + self.profile)
 
     def connect(self):
-        if self.setup_fl:
-           self.setup_environment()
         self.authenticate()
+        print(f"Profile before setup_profile: {self.profile}")  # Debug print
         self.setup_profile()

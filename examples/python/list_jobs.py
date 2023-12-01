@@ -15,14 +15,14 @@ def install_package():
 
 
 def run_example():
+
     from dip_connect.dip_conn import DIPConnect
 
-    profile = "my_new_profile"
-    dipc = DIPConnect(workspace_url="https://reglh-cyber.cloud.databricks.com/", setup_fl=False,profile=profile)
+    dipc = DIPConnect(workspace_url="<your workspace URL starting with https://>")
     dipc.connect()
 
     from databricks.sdk import WorkspaceClient
-    w = WorkspaceClient(profile=profile)
+    w = WorkspaceClient()
     for j in w.jobs.list():
         print(j)
 
