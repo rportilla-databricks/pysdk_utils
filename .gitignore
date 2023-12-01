@@ -1,0 +1,40 @@
+# ignore IntelliJ/PyCharm/VSCode IDE files
+.idea
+*.iml
+.vscode
+
+
+# ignore build files
+**/build
+**/dist
+
+## Python related files
+*.pyc
+**/__pycache__
+
+## pyenv files
+.python-version
+python/.python-version
+
+## tox files
+.tox
+python/.tox
+
+# ignore virtual environments
+python/venv
+python/.venv
+python/.env
+venv
+.venv
+.env
+
+# other misc ignore
+.DS_Store
+/docs/_build/
+
+# sphinx build folder
+docs/_build
+
+# ignore mypy cache
+.mypy_cache
+python/.mypy_cache

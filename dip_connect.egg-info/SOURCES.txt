@@ -1,0 +1,7 @@
+README.md
+setup.py
+dip_connect.egg-info/PKG-INFO
+dip_connect.egg-info/SOURCES.txt
+dip_connect.egg-info/dependency_links.txt
+dip_connect.egg-info/requires.txt
+dip_connect.egg-info/top_level.txt
