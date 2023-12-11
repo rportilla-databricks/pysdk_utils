@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 #build_version = get_latest_git_tag()
 
 # use the contents of the README file as the 'long description' for the package
-with open("./README.md", "r") as fh:
+with open("./README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 #
