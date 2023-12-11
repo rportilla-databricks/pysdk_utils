@@ -25,8 +25,24 @@ class DIPConnect:
             print("Workspace URL pattern not found")
 
     def authenticate(self):
+	
+        if platform.system() == "Windows":
+          try:
+            # Use 'where' command to find the binary path on Windows
+            result = subprocess.run(['where', 'databricks.exe'], stdout=subprocess.PIPE, text=True, check=True)
+            binary_path = result.stdout.strip()
+          except subprocess.CalledProcessError:
+            raise Exception("databricks.exe not found on Windows.")
+        else:
+          try:
+            # Use 'which' command to find the binary path on Linux
+            result = subprocess.run(['which', 'databricks'], stdout=subprocess.PIPE, text=True, check=True)
+            binary_path = result.stdout.strip()
+          except subprocess.CalledProcessError:
+            raise Exception("databricks not found on Linux.")
+    
         # Shell command for Databricks authentication
-        auth_command = "/usr/local/bin/databricks auth login --host {}".format(self.workspace_url)
+        auth_command = "{} auth login --host {}".format(binary_path, self.workspace_url)
 
         try:
             # Choose the right module based on the OS
@@ -60,8 +76,14 @@ class DIPConnect:
             # Wait for the command to complete
             child.expect(expect.EOF)
 
-            # Get the output
-            stdout = child.before.decode()
+            platform_name = platform.system()
+            print('platform is' + platform_name)
+ 
+            if platform_name == "Windows":
+              stdout = child.before
+            else:
+              # linux
+              stdout = child.before.decode()
 
             if stdout:
                 print("Authentication successful.")
